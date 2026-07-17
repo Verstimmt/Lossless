@@ -1,0 +1,18 @@
+name: Backup to GitLab
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone GitHub repo (mirror)
+        run: git clone --mirror https://github.com/EchoMusicApp/Lossless.git repo-mirror
+
+      - name: Push mirror to GitLab
+        run: |
+          cd repo-mirror
+          git push --mirror ${{ secrets.GITLAB_MIRROR_URL }}
